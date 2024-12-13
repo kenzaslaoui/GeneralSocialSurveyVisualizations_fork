@@ -50,7 +50,7 @@ library(ggplot2)
 data(gss_all)
 gss_all |>
   select(abany, discaff, cappun, region, age, childs, sex, relig) |>
-  vis_miss()
+  vis_miss() + theme_bw()
 ```
 
 Above, we can see a quick visualization of the primary variables - both dependent and independent - and which ones are missing. Not all questions were asked in all years of the survey. The main pattern here is that our response variables (abany = "Whether it should be possible for a pregnant woman to obtain a legal abortion if the woman wants it for any reason"; discaff = "What do you think the chances are these days that a white person won't get a job or promotion while an equally or less qualified black person gets one instead?"; cappun = "Do you favor or oppose the death penalty for persons convicted of murder?") are much more likely to be missing. This is because not every question was asked every year of the survey, and respondents are more likely to refuse to answer controversial questions than demographic data such as region, age, etc.
