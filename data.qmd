@@ -110,13 +110,15 @@ gss_ad <- gss_all |>
 
 ggplot(gss_ad, aes(y = haven::as_factor(discaff))) + 
   geom_bar() + 
-  ggtitle("Value Breakdown of discaff variable")
+  ggtitle("Value Breakdown of discaff variable")+
+  theme_bw
 ```
 
 ```{r}
 ggplot(gss_ad, aes(y = haven::as_factor(affrmact))) + 
   geom_bar() + 
-  ggtitle("Value Breakdown of affrmact variable")
+  ggtitle("Value Breakdown of affrmact variable") +
+  theme_bw()
 ```
 Similar to the abortion questions, as there are several possible slates of questions asked to respondents, not all survey participants are asked all questions. We will therefore discard the inapplicable answers (`iap`), as they did not participate in these questions; and the "don't know" values make up a small enough proportion of responses to be irrelevant to analyses.
 
@@ -179,5 +181,5 @@ ggplot(cp_df_2_sorted, aes(x = column, y = missing_percentage)) +
     position = position_dodge(width = 0.9),
     hjust = -0.1,
     size = 2.5
-  )
+  ) + theme_bw()
 ```
