@@ -151,7 +151,7 @@ gss_ab_fct_noNA = gss_ab_fct |> drop_na(c(`mother's health`,`birth defect`,`rape
 
 ### Does the public opinion on abortion vary based on the reason a woman is seeking abortion ?
 
-```{r, message=FALSE, warning=FALSE, fig.width = 10, fig.height = 8}
+```{r, message=FALSE, warning=FALSE, fig.width = 11.5, fig.height = 8}
 # Transforming the data into long format
 gss_abortion_reason_long_noNA = gss_ab_fct_noNA |>
       pivot_longer(cols = c(`mother's health`,`rape`,`birth defect`,`financial hardship`,`married-no more children`,`not married`, `any reason`), 
@@ -162,7 +162,11 @@ gss_abortion_reason_long_noNA = gss_ab_fct_noNA |>
 # Stacked bar chart to show the responses of respondents on whether a woman should be able to legally obtain an abortion based on the reason for seeking abortion
 ggplot(gss_abortion_reason_long_noNA |> filter(!is.na(response)), aes(x=abortion_reason, fill= response))+
   geom_bar(position="fill") + 
-  labs(title = "Public Opinions on Whether a Pregnant Woman Should Be Allowed to Obtain a Legal Abortion \n Categorized by Reason", y = "Percentage of Respondents", x = "Reason for Abortion") + theme_bw() + theme(plot.title = element_text(hjust=0.5)) + scale_fill_brewer(name = "Response", palette = "Dark2")
+  labs(title = "Public Opinions on Whether a Pregnant Woman Should Be Allowed to Obtain a Legal Abortion \n Categorized by Reason", y = "Percentage of Respondents", x = "Reason for Abortion", fill = "Response") +  theme_bw(12) +
+  #scale_fill_brewer(name = "Response", palette = "Dark2")  +
+  scale_fill_manual(values = c("#80CDC1", "#DFC27D")) +
+  theme(plot.title = element_text(face = "bold", size = 16)) 
+
 ```
 
 We first seek to investigate whether the general public opinion on abortion varies based on the reason a woman seeks abortion. We include data from the entire period of 50 years (1977-2022). Note that the seven variables we choose represent the following reasons:
@@ -197,11 +201,11 @@ gss_abortion_noNA = gss_abortion_reason_long_noNA |> group_by(year, abortion_rea
 ggplot(gss_abortion_noNA |> filter(response == "yes" ), aes(x=year, y=prop, color = abortion_reason, na.rm=TRUE)) +
   geom_point(size = 0.9,color = "black") +
   geom_line() +
-  labs (x = "Year", y = "Proportion of Positive Responses", title = "Percentage of Respondents In Favor of Abortion Categorized \n  by Reason across Time (1972-2022)") + theme_bw() +
+  labs (x = "Year", y = "Proportion of Positive Responses", title = "Percentage of Respondents In Favor of Abortion Categorized by Reason across Time (1972-2022)", color = "Abortion Reason") + theme_bw(12) +
   scale_x_continuous(n.breaks = 14) +
-  scale_y_continuous() + 
-  theme(plot.title = element_text(hjust=0.5)) + 
-  scale_color_brewer(name = "Abortion Reason", palette = "Dark2")
+  scale_y_continuous()  + 
+  #scale_color_brewer(name = "Abortion Reason", palette = "Dark2")  +
+  theme(plot.title = element_text(face = "bold", size = 14)) 
 ```
 
 Since public opinion on abortion in the United States varies depending on the reason for seeking an abortion, as shown by data collected between 1977 and 2022, a natural follow-up question is whether these opinions have changed over time. To explore this, we examine shifts in public opinion for each reason for seeking abortion. Several interesting trends emerge. First, abortion when the mother's health is at risk has consistently received overwhelming support since 1972, maintaining around 80% support throughout this period. This is the only category that shows no significant changes in support over time. For all other reasons, however, support has fluctuated: a decline in support occurred between 1985 and 1987, followed by an increase between 1990 and 1995, a decline between 1995 and 2005, a noticeable increase in 2010, and then a steady rise thereafter.
@@ -228,12 +232,13 @@ prc_dem_sex_noNA = gss_ab_fct_noNA |>
       mutate(abortion_reason = factor(abortion_reason, levels= c("mother's health", "rape","birth defect", "financial hardship","married-no more children","not married", "any reason"))) |> group_by(year, abortion_reason, sex, response) |> summarize(n=n()) |> mutate(prop = n/sum(n))
 
 ggplot(prc_dem_sex_noNA |> filter(response == "yes", sex != is.na(sex)), aes(x=year, y=prop, color = abortion_reason)) +
-  geom_point(size = 0.9,color = "black") +
-  geom_line() +
-  labs (x = "Year", y = "Proportion of Positive Responses", title = "Change in Percentage of Repondents In Favor of Abortion by Demographic (Sex) Group Across Time (1972-2022)") + theme_bw(19) +
+  geom_point(size = 1.3,color = "black") +
+  geom_line(size = 0.8) +
+  labs (x = "Year", y = "Proportion of Positive Responses", title = "Change in Percentage of Repondents In Favor of Abortion by Demographic (Sex) Group \n Across Time (1972-2022)", color = "Abortion Reason") + theme_bw(23) +
   scale_x_continuous(n.breaks = 14) +
   scale_y_continuous() +
-  facet_wrap(~sex, ncol = 1) + scale_fill_brewer(name = "Response", palette = "Dark2")
+  facet_wrap(~sex, ncol = 1) + #scale_fill_brewer(name = "Response", palette = "Dark2") +
+  theme(plot.title = element_text(face = "bold", size = 27)) 
 ```
 
 
@@ -249,13 +254,16 @@ prc_dem_polviews_noNA = gss_ab_fct_noNA |>
       mutate(abortion_reason = factor(abortion_reason, levels= c("mother's health", "rape","birth defect", "financial hardship","married-no more children","not married", "any reason"))) |> group_by(year, abortion_reason, polviews, response) |> summarize(n=n()) |> mutate(prop = n/sum(n))
 
 ggplot(prc_dem_polviews_noNA |> filter(response == "yes"), aes(x=year, y=prop, color = abortion_reason)) +
-  geom_point(size = 0.9,color = "black") +
-  geom_line() +
-  labs (x = "Year", y = "Proportion of Positive Responses", title = "Change in Percentage of Repondents In Favor of Abortion by Demographic (Social/Political Belief) Group Across Time (1972-2022)") + theme_bw(19) +
+  geom_point(size = 1,color = "black") +
+  geom_line(size = 0.7) +
+  labs (x = "Year", y = "Proportion of Positive Responses", title = "Change in Percentage of Repondents In Favor of Abortion by Demographic (Social/Political Belief) Group \n Across Time (1972-2022)", color = "Abortion Reason") + theme_bw(23) +
   scale_x_continuous(n.breaks = 14) +
   scale_y_continuous() +
-  facet_wrap(~polviews, ncol = 2) + 
-  scale_fill_brewer(name = "Response", palette = "Dark2")
+  facet_wrap(~polviews, ncol = 2) +
+  #scale_color_manual(values = my_palette) +
+  #scale_color_brewer(name = "Response", palette = "Dark2") +
+  theme(plot.title = element_text(face = "bold", size = 27))
+
 
 ```
 
@@ -275,7 +283,7 @@ In 1994, the General Social Survey began collecting data on public support or op
 
 ### Does the public opinion on affirmative action vary consistently by region over time?
 
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, fig.height = 6}
 
 year_averages <- gss_d |>
   filter(!is.na(as.factor(affrmact)), !is.na(as.factor(discaff))) |>
@@ -293,11 +301,12 @@ year_averages <- gss_d |>
 b <- ggplot(year_averages, aes(x = year, y = affrmact_avg, color = region_recode)) + 
   geom_point(size = 0.9, color = "black") +
   geom_line() + 
-  scale_color_discrete(name = "region") +
+  scale_color_discrete(name = "Region") +
   theme_bw(12) + 
-  labs(y = "Average Support to Opposition on a 1-4 scale") +
-  scale_color_brewer(palette="Dark2", name = "Region") + 
-  ggtitle("Regional Opinions on Affirmative Action Over Time")
+  labs(y = "Average Support to Opposition on a 1-4 scale", x = "Year") +
+  #scale_color_brewer(palette="Dark2", name = "Region") + 
+  ggtitle("Regional Opinions on Affirmative Action Over Time")+
+  theme(plot.title = element_text(face = "bold", size = 14)) 
 b
 ```
 We first examine whether there is consistent regional variation for support (lower-number responses on this scale) or opposition (higher-number responses on this scale) over the period of time that affirmative action has been on the GSS. Interestingly, the only pattern that really stands out is that the northeast has been generally more likely to support affirmative action over the time where the question was asked, while other regions have oscillated in their relative positions over time. This is perhaps indicative that political divisions on this issue are less regionally varied than the standard political assumptions that political analysts tend to make.
@@ -313,9 +322,10 @@ c <- ggplot(year_averages_pol, aes(x = affrmact_avg, y = discaff_avg, color= fct
   geom_point(size = 3) + 
   labs(x = "Average Support to Opposition for Affirmative Action on a 1-4 scale",
        y = "Average Belief that Affirmative Action Does Not Harm White People on a 1-3 scale") + 
-  ggtitle("Correlatiing views on Affirmative Action, by Political Leaning") + 
+  ggtitle("Correlating views on Affirmative Action, by Political Leaning") + 
   scale_color_brewer(palette = "BrBG", name = "Political Views") + 
-  theme_bw(12)
+  theme_bw(12) +
+  theme(plot.title = element_text(face = "bold", size = 16)) 
 c
 ```
 Here, we can see a clear correlation between support for affirmative action and the belief that it does not harm white people when implemented, as one might expect. Each point is a single year's sample, split between the options for self-described political views provided by the GSS, taking the average of responses to those variables. Interestingly, it is not a particularly tight correlation, with a fairly wide spread in the relationship between the two variables, although there is evident clustering on the political view scale, with people who have similar political views having fairly similar views on affirmative action. However, that clustering has a lot of overlap, and could not be derived without knowing the respondents' self-identified political views. In fact, we can see overlap of groups as disparate as "moderate" and "extremely conservative", though we do not see as much overlap between groups on the liberal side of the spectrum.
@@ -330,12 +340,13 @@ d <- ggplot(year_averages_by, aes(x=birthyear, fill=haven::as_factor(affrmact)))
   geom_bar(position="fill") + 
   theme_bw(12) + 
   scale_fill_brewer(palette = "BrBG", name = "Opinion on Affirmative Action") + 
-  labs(y = "Proportion of population", x = "Birth Year") + 
-  ggtitle("Distribution of Opinions on Affirmative Action by Birth Year")
+  labs(y = "Proportion of Population", x = "Birth Year") + 
+  ggtitle("Distribution of Opinions on Affirmative Action by Birth Year") +
+  theme(plot.title = element_text(face = "bold", size = 14)) 
 d
 ```
 
-In this chart, we calculate the approximate birth year of respondents based on their age at the time of the survey. We can see that as pepole get younger, they are significantly more likely to favor affirmative action, though no group ever reached a majority in favor until very recently - and either tail end should be taken as likely very distorted due to a smaller sample size. The main feature evident here is that over time, the proportion of respondents answering "strongly favors" is mainly what has increased, with the "strongly opposes" decreasing, while the less-extreme views essentially stay consistent in their proportions. 
+In this chart, we calculate the approximate birth year of respondents based on their age at the time of the survey. We can see that as people get younger, they are significantly more likely to favor affirmative action, though no group ever reached a majority in favor until very recently - and either tail end should be taken as likely very distorted due to a smaller sample size. The main feature evident here is that over time, the proportion of respondents answering "strongly favors" is mainly what has increased, with the "strongly opposes" decreasing, while the less-extreme views essentially stay consistent in their proportions. 
 
 ### Do opinions on affirmative action vary with employment status?
 
@@ -357,9 +368,10 @@ a <- gss_d |>
   geom_line() +
   facet_wrap(~worknew, ncol=1) + 
   scale_color_brewer(name = "Opinion on Affirmative Action", palette = "BrBG") + 
-  labs(x = "Proportion of respondents") + 
-  ggtitle("Variation of Viewpoints on Affirmative Action over time, by Employment Status") + 
-  theme_bw(12)
+  labs(y = "Proportion of Respondents", x = "Year") + 
+  ggtitle("Variation of Viewpoints on Affirmative Action over Time, by Employment Status") + 
+  theme_bw(12)+
+  theme(plot.title = element_text(face = "bold", size = 14)) 
 a
 ```
 
@@ -382,57 +394,54 @@ cappun_summary <- cappun_data |>
   group_by(year, cappun) |>
   summarise(count = n()) |>
   group_by(year) |>
-  mutate(proportion = count / sum(count))
+  mutate(proportion = count / sum(count)) |> 
+  filter(cappun == "Favor")
 
 ggplot(cappun_summary, aes(x = year, 
-                           y = proportion, 
-                           fill = cappun, 
-                           color = cappun)) +
-  geom_area(alpha = 0.2, position = "identity") +
-  geom_line() +
-  scale_fill_manual(values = c("Favor" = "darkgray", "Oppose" = "#34968e")) +
-  scale_color_manual(values = c("Favor" = "black", "Oppose" = "#01665e")) +
-  scale_y_continuous(labels = scales::percent) +
+                           y = proportion)) +
+  geom_area(alpha = 0.2, position = "identity", fill = "grey") +
+  geom_line(color = "black") +
+  scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
   theme_bw() +
   labs(
     title = "America's Changing View on Capital Punishment",
     subtitle = "Public Opinion Trends (1974-2018)",
     x = "Year",
-    y = "Percentage of Respondents",
+    y = "Percentage of Respondents in Favor of Capital Punishment",
     caption = "Source: General Social Survey"
   ) +
   theme(
     plot.title = element_text(face = "bold", size = 16),
-    plot.subtitle = element_text(color = "#be802f"),
+    plot.subtitle = element_text(color = "gray40"),
     legend.position = "bottom",
     panel.grid.minor = element_blank(),
-    panel.grid.major = element_line(color = "#34968e", linetype = "dotted")
+    panel.grid.major = element_line(color = "gray40", linetype = "dotted")
   ) +
   geom_vline(xintercept = 1985, 
              linetype = "dashed",
-             color = "gray40") +
+             color = "#BF812D") +
   annotate("text", x = 1985, y = 0.60, 
            label = "Peak\n(80% Favor)", 
-           color = "gray40", 
+           color = "#BF812D", 
            fontface = "italic") +
   geom_vline(xintercept = 2000,
              linetype = "dashed",
-             color = "gray40") +
+             color = "#01665E") +
   annotate("text", x = 2000, y = 0.50, 
            label = "DNA exonerations\ngain attention", 
-           color = "gray40") +
+           color = "#01665E") +
   geom_vline(xintercept = 2007, 
              linetype = "dashed",
-             color = "gray40") +
+             color = "#01665E") +
   annotate("text", x = 2007, y = 0.20, 
            label = "New Jersey\nabolishes death penalty", 
-           color = "gray40") +
+           color = "#01665E") +
   geom_vline(xintercept = 2021, 
              linetype = "dashed",
-             color = "gray40") +
+             color = "#BF812D") +
   annotate("text", x = 2019, y = 0.50, 
            label = "Low \n(56% Favor)", 
-           color = "gray40",
+           color = "#BF812D",
            fontface = "italic")
 
 ```
@@ -441,7 +450,7 @@ ggplot(cappun_summary, aes(x = year,
 
 #### Race
 The racial disparity in support for capital punishment, with Black people opposing it more than White people, reflects complex historical and societal factors. This difference likely stems from the Black community's experiences with systemic racism in the criminal justice system, including higher rates of wrongful convictions and disproportionate application of the death penalty. Black Americans may view capital punishment as an extension of historical injustices, from slavery to lynchings, leading to a deeper skepticism of the state's power over life and death. Conversely, White Americans, generally experiencing more favorable treatment in the justice system, may be more likely to trust its processes and view capital punishment as a legitimate form of justice. This racial divide underscores how personal and communal experiences with law enforcement and the broader criminal justice system can profoundly shape perspectives on punitive measures like the death penalty.
-```{r}
+```{r, message=FALSE, warning=FALSE}
 
 cappun_data <- gss_all |> 
   select(year, race, cappun) |>
@@ -460,16 +469,18 @@ ggplot(cappun_data, aes(x = as.factor(year), fill = cappun)) +
   labs(
     title = "Capital Punishment Opinions by Race over Time",
     x = "Year",
-    y = "Proportion",
+    y = "Proportion of Respondents",
     fill = "Opinion"
   ) +
   theme_bw() +
   scale_x_discrete(breaks = function(x) x[seq(1, length(x), by = 4)]) +
-  scale_fill_manual(values = c("Favor" = "darkgray", "Oppose" = "#34968e")) +
+  scale_fill_manual(values = c("Favor" = "#DFC27D", "Oppose" = "#80CDC1")) +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
     strip.text = element_text(face = "bold")
-  )
+  ) +
+  theme(plot.title = element_text(face = "bold", size = 14)) 
+
 ```
 
 #### Religion
@@ -500,14 +511,16 @@ relig_summary <- relig_summary |>
   mutate(relig = factor(relig, levels = correct_order))
 
 ggplot(relig_summary, aes(x = relig, y = proportion)) +
-  geom_bar(stat = "identity", fill = "darkgray", width = 0.6) +
+  geom_bar(stat = "identity", fill = "#DFC27D", width = 0.6) +
   geom_text(aes(label = scales::percent(proportion, accuracy = 0.1)), 
-            vjust = -0.5, size = 4) +
+            vjust = -0.5, size = 3) +
   scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
   labs(title = "Support for Capital Punishment by Religion",
        x = "Religion",
-       y = "Proportion Favoring") +
-  theme_bw()
+       y = "Proportion of Respondents Favoring") +
+  theme_bw() +
+  theme(plot.title = element_text(face = "bold", size = 14)) 
+
 ```
 
 
