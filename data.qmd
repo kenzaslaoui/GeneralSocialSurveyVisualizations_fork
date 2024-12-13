@@ -111,7 +111,7 @@ ggplot(NA_percentage_b |> mutate(reason = factor(reason, levels = inv$reason)), 
 gss_ad <- gss_all |> 
   select(discaff, affrmact)
 
-ggplot(gss_ad, aes(y = forcats::fct_rev(fct_infreq(haven::as_factor(discaff)))))+
+ggplot(gss_ad, aes(y = forcats::fct_rev(forcats::fct_infreq(haven::as_factor(discaff)))))+
   geom_bar() + 
   ggtitle("Value Breakdown of 'discaff' Variable") +
   labs(y = "Possible Responses to 'discaff'", x = "Count") +
@@ -119,7 +119,7 @@ ggplot(gss_ad, aes(y = forcats::fct_rev(fct_infreq(haven::as_factor(discaff)))))
 ```
 
 ```{r}
-ggplot(gss_ad, aes(y = forcats::fct_rev(fct_infreq(haven::as_factor(affrmact))))) + 
+ggplot(gss_ad, aes(y = forcats::fct_rev(forcats::fct_infreq(haven::as_factor(affrmact))))) + 
   geom_bar() + 
   ggtitle("Value Breakdown of 'affrmact' Variable") +
   labs(y = "Possible Responses to 'affrmact'", x = "Count") +
