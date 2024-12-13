@@ -271,7 +271,7 @@ ggplot(prc_dem_polviews_noNA |> filter(response == "yes"), aes(x=year, y=prop, c
 
 ```{r, message=FALSE, warning=FALSE}
 
-data(gss_all)
+#data(gss_all)
 years <- gss_which_years(gss_all, affrmact) |> 
   filter(affrmact == TRUE)
 

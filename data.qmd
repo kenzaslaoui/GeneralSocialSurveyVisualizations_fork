@@ -111,7 +111,7 @@ gss_ad <- gss_all |>
 ggplot(gss_ad, aes(y = haven::as_factor(discaff))) + 
   geom_bar() + 
   ggtitle("Value Breakdown of discaff variable")+
-  theme_bw
+  theme_bw()
 ```
 
 ```{r}
