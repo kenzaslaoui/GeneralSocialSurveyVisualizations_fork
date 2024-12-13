@@ -47,6 +47,7 @@ library(gssrdoc)
 library(naniar)
 library(dplyr)
 library(ggplot2)
+library(forcats)
 data(gss_all)
 gss_all |>
   select(abany, discaff, cappun, region, age, childs, sex, relig) |>
@@ -111,7 +112,7 @@ ggplot(NA_percentage_b |> mutate(reason = factor(reason, levels = inv$reason)), 
 gss_ad <- gss_all |> 
   select(discaff, affrmact)
 
-ggplot(gss_ad, aes(y = forcats::fct_rev(forcats::fct_infreq(haven::as_factor(discaff)))))+
+ggplot(gss_ad, aes(y = fct_rev(fct_infreq(haven::as_factor(discaff)))))+
   geom_bar() + 
   ggtitle("Value Breakdown of 'discaff' Variable") +
   labs(y = "Possible Responses to 'discaff'", x = "Count") +
@@ -119,7 +120,7 @@ ggplot(gss_ad, aes(y = forcats::fct_rev(forcats::fct_infreq(haven::as_factor(dis
 ```
 
 ```{r}
-ggplot(gss_ad, aes(y = forcats::fct_rev(forcats::fct_infreq(haven::as_factor(affrmact))))) + 
+ggplot(gss_ad, aes(y = fct_rev(fct_infreq(haven::as_factor(affrmact))))) + 
   geom_bar() + 
   ggtitle("Value Breakdown of 'affrmact' Variable") +
   labs(y = "Possible Responses to 'affrmact'", x = "Count") +
@@ -130,8 +131,6 @@ Similar to the abortion questions, as there are several possible slates of quest
 ### Capital Punishment (cappun) missing row analysis
 The missing data analysis reveals that there are significant gaps in the information collected for this survey. The variable with the highest rate of missing values is religion, with 60.14% of responses lacking this data point. Region also has a high rate of missingness at 33.41%. Other variables with substantial missing information include degree (22.92% missing), sex (27.67% missing), and race (27.80% missing). The variable with the lowest rate of missing data is age, but even here 18.91% of responses are incomplete. These high levels of missingness across multiple key demographic variables could introduce bias and limit the conclusions that can be drawn from the analysis. It will be important to carefully consider how to address these gaps, whether through imputation techniques or by restricting the analysis to only complete cases, in order to obtain reliable insights from the Capital Punishment dataset.
 ```{r, message=FALSE, warning=FALSE}
-library(ggplot2)
-library(dplyr)
 
 cp <- gss_all |> filter(cappun==1 | cappun==2)
 
