@@ -325,7 +325,7 @@ c <- ggplot(year_averages_pol, aes(x = affrmact_avg, y = discaff_avg, color= fct
   ggtitle("Correlating views on Affirmative Action, by Political Leaning") + 
   scale_color_brewer(palette = "BrBG", name = "Political Views") + 
   theme_bw(12) +
-  theme(plot.title = element_text(face = "bold", size = 12)) 
+  theme(plot.title = element_text(face = "bold", size = 13)) 
 c
 ```
 Here, we can see a clear correlation between support for affirmative action and the belief that it does not harm white people when implemented, as one might expect. Each point is a single year's sample, split between the options for self-described political views provided by the GSS, taking the average of responses to those variables. Interestingly, it is not a particularly tight correlation, with a fairly wide spread in the relationship between the two variables, although there is evident clustering on the political view scale, with people who have similar political views having fairly similar views on affirmative action. However, that clustering has a lot of overlap, and could not be derived without knowing the respondents' self-identified political views. In fact, we can see overlap of groups as disparate as "moderate" and "extremely conservative", though we do not see as much overlap between groups on the liberal side of the spectrum.

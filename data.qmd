@@ -103,7 +103,7 @@ ggplot(NA_percentage_b |> mutate(reason = factor(reason, levels = inv$reason)), 
   geom_col() +
   labs(x = "Reason for abortion", y = "Percentage of Missing Values (NA) in the Responses", title = "Percentage of Missing Values (NA) in Responses to Abortion Questions by NA Label", fill = "Response") +
   theme_bw(12) +
-  theme(plot.title = element_text( size = 15))
+  theme(plot.title = element_text( size = 20))
 
 ```
 
