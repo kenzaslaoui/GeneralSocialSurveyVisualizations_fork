@@ -50,7 +50,8 @@ library(ggplot2)
 data(gss_all)
 gss_all |>
   select(abany, discaff, cappun, region, age, childs, sex, relig) |>
-  vis_miss() + theme_bw()
+  vis_miss() + 
+  ggtitle("Missing Value Analysis") 
 ```
 
 Above, we can see a quick visualization of the primary variables - both dependent and independent - and which ones are missing. Not all questions were asked in all years of the survey. The main pattern here is that our response variables (abany = "Whether it should be possible for a pregnant woman to obtain a legal abortion if the woman wants it for any reason"; discaff = "What do you think the chances are these days that a white person won't get a job or promotion while an equally or less qualified black person gets one instead?"; cappun = "Do you favor or oppose the death penalty for persons convicted of murder?") are much more likely to be missing. This is because not every question was asked every year of the survey, and respondents are more likely to refuse to answer controversial questions than demographic data such as region, age, etc.
@@ -61,7 +62,7 @@ In our analysis of public opinion on abortion using the GSS data, we initially n
 
 Below is a graph showing the percentage of missing values in each of the abortion-related variables we investigate in our analysis. Note that all the variables have a high percentage of missing values around 45% for "abortion for any reason" and around 35% for all other variables, as not all variables were included on all slates. Additionally, note that most of the missing values are inapplicable responses with over 90% of all missing values being inapplicable responses.
 
-```{r, warning = FALSE, message = FALSE, fig.height = 10, fig.width = 10}
+```{r, warning = FALSE, message = FALSE, fig.height = 8, fig.width = 11}
 gss_ab = gss_all |>
   select(c(year, abdefect, abnomore, abhlth, abpoor, abrape, absingle, abany, sex, age, race, degree, relig, relig16, marital, partyid, polviews, childs, region, reg16))
 
@@ -99,25 +100,29 @@ inv = NA_percentage_b |> group_by(reason) |> summarize(sum(Perc)) |> arrange(des
                           
 ggplot(NA_percentage_b |> mutate(reason = factor(reason, levels = inv$reason)), aes(x=reason, y= Perc, fill = response)) +
   geom_col() +
-  labs(x = "Reason for abortion", y = "Percentage of missing values (NA) in the responses", title = "Percentage of Missing Values (NA) in Responses to Abortion Questions by NA Label") +
-  theme_bw()
+  labs(x = "Reason for abortion", y = "Percentage of Missing Values (NA) in the Responses", title = "Percentage of Missing Values (NA) in Responses to Abortion Questions by NA Label", fill = "Response") +
+  theme_bw(12) +
+  theme(plot.title = element_text( size = 15))
 
 ```
+
 ### Affirmative Action: Missing Values
 ```{r}
 gss_ad <- gss_all |> 
   select(discaff, affrmact)
 
-ggplot(gss_ad, aes(y = haven::as_factor(discaff))) + 
+ggplot(gss_ad, aes(y = fct_rev(fct_infreq(haven::as_factor(discaff)))))+
   geom_bar() + 
-  ggtitle("Value Breakdown of discaff variable")+
-  theme_bw()
+  ggtitle("Value Breakdown of 'discaff' Variable") +
+  labs(y = "Possible Responses to 'discaff'", x = "Count") +
+  theme_bw() 
 ```
 
 ```{r}
-ggplot(gss_ad, aes(y = haven::as_factor(affrmact))) + 
+ggplot(gss_ad, aes(y = fct_rev(fct_infreq(haven::as_factor(affrmact))))) + 
   geom_bar() + 
-  ggtitle("Value Breakdown of affrmact variable") +
+  ggtitle("Value Breakdown of 'affrmact' Variable") +
+  labs(y = "Possible Responses to 'affrmact'", x = "Count") +
   theme_bw()
 ```
 Similar to the abortion questions, as there are several possible slates of questions asked to respondents, not all survey participants are asked all questions. We will therefore discard the inapplicable answers (`iap`), as they did not participate in these questions; and the "don't know" values make up a small enough proportion of responses to be irrelevant to analyses.
