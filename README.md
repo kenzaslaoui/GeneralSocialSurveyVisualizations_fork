@@ -14,4 +14,4 @@ We downloaded the GSS data using the R packages
 [gssr and gssrdoc](https://kjhealy.github.io/gssr/), built by kjhealy.
 
 ## View the Report
-[Link to the report](https://jdonohue44.github.io/GeneralSocialSurveyVisualizations/)
+[Report](https://jdonohue44.github.io/GeneralSocialSurveyVisualizations/)
